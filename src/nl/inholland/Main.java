@@ -32,7 +32,7 @@ public class Main extends Application {
   public void start(Stage window) throws Exception {
 
     window.setHeight(500);
-    window.setWidth(300);
+    window.setMinWidth(300);
 
     VBox layout = new VBox(10);
     layout.setPadding(new Insets(10));
@@ -111,7 +111,7 @@ public class Main extends Application {
     layout.getChildren().addAll(bar, todos, form);
 
 
-    Panel panel = new Panel("Bla");
+    Panel panel = new Panel("Dead Puppies");
     addButton.getStyleClass().setAll("btn", "btn-danger");
     uselessButton.getStyleClass().setAll("btn", "btn-primary");
     panel.getStyleClass().add("panel-primary");
