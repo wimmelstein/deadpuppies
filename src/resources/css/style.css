@@ -1,0 +1,15 @@
+.root {
+    -fx-background-color: #C2C2C2;
+}
+
+.button {
+    -fx-background-color: blue;
+    -fx-background-radius: 5px;
+    -fx-text-fill: white;
+}
+
+.useless {
+    -fx-background-color: black;
+    -fx-background-radius: 5px;
+    -fx-text-fill: white;
+}
