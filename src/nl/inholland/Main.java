@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.kordamp.bootstrapfx.scene.layout.Panel;
 
 import java.io.*;
@@ -91,21 +92,25 @@ public class Main extends Application {
     Button uselessButton = new Button("Useless");
     uselessButton.getStyleClass().add("useless");
     todos.setRowFactory(
-        tv -> {
-          TableRow<Item> row = new TableRow<>();
-          row.setOnMouseClicked(
-              new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                  if (mouseEvent.getClickCount() == 2 && !row.isEmpty()) {
-                    Item item = row.getItem();
-                    item.setComplete(!item.isComplete());
-                    todos.refresh();
+        new Callback<TableView<Item>, TableRow<Item>>() {
+          @Override
+          public TableRow<Item> call(TableView<Item> itemTableView) {
+            TableRow<Item> row = new TableRow<>();
+            row.setOnMouseClicked(
+                new EventHandler<MouseEvent>() {
+                  @Override
+                  public void handle(MouseEvent mouseEvent) {
+                    if (mouseEvent.getClickCount() == 2 && !row.isEmpty()) {
+                      Item item = row.getItem();
+                      item.setComplete(!item.isComplete());
+                      todos.refresh();
+                    }
                   }
-                }
-              });
-          return row;
+                });
+            return row;
+          }
         });
+
     HBox form = new HBox(10);
     form.getChildren().addAll(description, addButton, uselessButton);
     layout.getChildren().addAll(bar, todos, form);
