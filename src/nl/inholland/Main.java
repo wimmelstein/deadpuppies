@@ -1,6 +1,9 @@
 package nl.inholland;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +27,7 @@ public class Main extends Application {
 
   private TextField description;
   private ObservableList<Item> toDoList;
+  private CheckBox done;
 
   public static void main(String[] args) {
     launch(args);
@@ -68,8 +72,32 @@ public class Main extends Application {
     TableView<Item> todos = new TableView<>();
     TableColumn<Item, String> descriptionColumn = new TableColumn<>("Description");
     descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-    TableColumn<Item, Boolean> isCompleteColumn = new TableColumn<>("Complete");
-    isCompleteColumn.setCellValueFactory(new PropertyValueFactory<>("complete"));
+    TableColumn<Item, CheckBox> isCompleteColumn = new TableColumn<>("Complete");
+    isCompleteColumn.setCellValueFactory(
+        new Callback<>() {
+
+          @Override
+          public ObservableValue<CheckBox> call(
+              TableColumn.CellDataFeatures<Item, CheckBox> selected) {
+            Item selectedItem = selected.getValue();
+            CheckBox checkBox = new CheckBox();
+            checkBox.selectedProperty().setValue(selectedItem.isComplete());
+
+            checkBox.selectedProperty().addListener(
+                new ChangeListener<Boolean>() {
+                  @Override
+                  public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+                    selectedItem.setComplete(newValue);
+                    System.out.println(selectedItem);
+                  }
+                }
+            );
+            return new SimpleObjectProperty<CheckBox>(checkBox);
+          }
+        }
+    );
+    isCompleteColumn.setStyle("-fx-alignment: center");
+    //isCompleteColumn.setCellValueFactory(new PropertyValueFactory<>("complete"));
 
     todos.getColumns().addAll(descriptionColumn, isCompleteColumn);
 
